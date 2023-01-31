@@ -6,48 +6,58 @@
 
 # objet
 
-def ma_fonction(prenom):
-    print(f"Bonjour {prenom}")
-    return True
-
-
 class Voiture:
-    constructeur = "Renault SARL"
-    nb_roues = 4
-
-    nb_voiture = 0
-
-    # vitesse_max = 250
+    _constructeur = "Renault SARL"
+    _nb_roues = 4
+    _nb_voiture = 0
 
     # constructeur
     def __init__(self, vitesse_bridage):
-        # Debug
-        # self.nb_voiture = self.nb_voiture + 1
-        # print("Création de la voiture n°" + str(self.nb_voiture))
-        self.vitesse_max = 250
-        self.couleur = "rouge"
-        if (vitesse_bridage <= self.vitesse_max):
-            self.vitesse_max = vitesse_bridage
+        Voiture._nb_voiture = Voiture._nb_voiture + 1
+        print("Création de la voiture n°" + str(Voiture._nb_voiture))
+        self._vitesse_max = 250
+        self._couleur = "rouge"
+        self.bridage(vitesse_bridage)
 
     def __str__(self):
         # f-string
-        return f"Je suis une voiture de couleur {self.couleur} roulant à {self.vitesse_max}km/h"
+        return f"Je suis une voiture de couleur {self._couleur} roulant à {self._vitesse_max}km/h"
+
+    def get_vitesse_max(self):
+        return self._vitesse_max
+
+    def set_vitesse_max(self, vitesse_max):
+        # self._vitesse_max = vitesse_max
+        self.bridage(vitesse_max)
+
+    def bridage(self, vitesse_bridage):
+        if (vitesse_bridage <= self._vitesse_max):
+            self._vitesse_max = vitesse_bridage
 
     def demarrer(self):
         print("Démarrage de la voiture")
-        print("Je peux rouler à " + str(self.vitesse_max))
+        print("Je peux rouler à " + str(self._vitesse_max))
 
     def klaxonner(self):
         print("Tut tut")
 
+    # arreter()
 
 ta_voiture = Voiture(300)
 ma_voiture = Voiture(225)
 
-# ta_voiture.vitesse_max = 200
+print(ta_voiture)
+print(ma_voiture)
+
+ta_voiture.bridage(180)
+
+# Interdit : accès direct aux attributs !
+# print(ta_voiture._vitesse_max)
+# ta_voiture._vitesse_max = 500
+
+# On utilise les accesseurs & mutateurs
+print(ta_voiture.get_vitesse_max())
+ta_voiture.set_vitesse_max(500)
 
 # ta_voiture.demarrer()
 # ma_voiture.demarrer()
-
-print(ta_voiture)
-print(ma_voiture)
