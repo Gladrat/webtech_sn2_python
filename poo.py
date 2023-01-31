@@ -13,11 +13,13 @@ class Voiture:
 
     # constructeur
     def __init__(self, vitesse_bridage):
-        Voiture._nb_voiture = Voiture._nb_voiture + 1
-        print("Création de la voiture n°" + str(Voiture._nb_voiture))
         self._vitesse_max = 250
+        self._vitesse = 0
+        self._est_demarree = False
         self._couleur = "rouge"
         self.bridage(vitesse_bridage)
+        Voiture._nb_voiture = Voiture._nb_voiture + 1
+        print("Création de la voiture n°" + str(Voiture._nb_voiture))
 
     def __str__(self):
         # f-string
@@ -35,13 +37,18 @@ class Voiture:
             self._vitesse_max = vitesse_bridage
 
     def demarrer(self):
-        print("Démarrage de la voiture")
-        print("Je peux rouler à " + str(self._vitesse_max))
+        if (not self._est_demarree):
+            print("Démarrage de la voiture")
+            print("Je peux rouler à " + str(self._vitesse_max))
+            self._est_demarree = True
+            
+    def arreter(self):
+        if (self._est_demarree and self._vitesse == 0):
+            print("Arrêt de la voiture")
+            self._est_demarree = False
 
     def klaxonner(self):
         print("Tut tut")
-
-    # arreter()
 
 ta_voiture = Voiture(300)
 ma_voiture = Voiture(225)
@@ -51,13 +58,7 @@ print(ma_voiture)
 
 ta_voiture.bridage(180)
 
-# Interdit : accès direct aux attributs !
-# print(ta_voiture._vitesse_max)
-# ta_voiture._vitesse_max = 500
-
-# On utilise les accesseurs & mutateurs
-print(ta_voiture.get_vitesse_max())
-ta_voiture.set_vitesse_max(500)
-
-# ta_voiture.demarrer()
-# ma_voiture.demarrer()
+ta_voiture.demarrer()
+ta_voiture.arreter()
+ma_voiture.demarrer()
+ma_voiture.arreter()
