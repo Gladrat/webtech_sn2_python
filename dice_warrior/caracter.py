@@ -31,6 +31,7 @@ class Caracter:
     def defense(self, wounds):
         # soustrayant la defense
         # soustrayant le résultat d'un jet de dès
+        pass
 
 if __name__ == "__main__":
     a_new_dice = Dice()
