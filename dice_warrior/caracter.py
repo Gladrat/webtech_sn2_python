@@ -3,11 +3,11 @@ from dice import Dice, RiggedDice
 class Caracter:
     _type = "Caracter"
 
-    def __init__(self, name, max_health, damage, defense, dice):
+    def __init__(self, name, max_health, attack, defense, dice):
         self._name = name
         self._max_health = max_health
         self._health = max_health
-        self._damage = damage
+        self._attack = attack
         self._defense = defense
         self._dice = dice
 
@@ -23,22 +23,22 @@ class Caracter:
         print(health_bar)
     
     def attack(self):
-        # calculer les damages infligés à une cible
-        # rajouter un jet de dès
-        # afficher le calcul complet
-        pass
+        result = self._dice.roll()
+        damages = self._attack + result
+        print(f"{type(self)._type} {self._name} attack with {damages} (attack: {self._attack} + roll: {result})")
     
-    def defense(self, wounds):
-        # soustrayant la defense
-        # soustrayant le résultat d'un jet de dès
-        pass
+    def defend(self, wounds):
+        damages = wounds
+        result = self._dice.roll()
+        wounds = wounds - self._defense - result
+        print(f"{type(self)._type} {self._name} take {wounds} (damages: {damages} - defense: {self._defense} - roll: {result})")
 
 if __name__ == "__main__":
     a_new_dice = Dice()
     print(a_new_dice)
     
-    a_caracter = Caracter("Tom", 20, 8, 3, a_new_dice)
-    a_caracter._health = 6
-    a_caracter.show_health()
+    caracter_1 = Caracter("Tom", 20, 8, 3, a_new_dice)
+    caracter_2 = Caracter("Helen", 20, 8, 3, a_new_dice)
     
-    a_second_caracter = Caracter("Helen", 20, 8, 3, a_new_dice)
+    caracter_1.attack()
+    caracter_1.defend(10)
