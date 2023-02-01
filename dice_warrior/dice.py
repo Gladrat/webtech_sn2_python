@@ -30,7 +30,11 @@ class RiggedDice(Dice):
 if __name__ == "__main__":
     a_dice = Dice()
     print(a_dice)
+    print(a_dice.roll())
 
     a_rigged_dice = RiggedDice(20)
     print(a_rigged_dice)
-    print(a_rigged_dice.roll(True))
+    print(a_rigged_dice.roll(False))
+    
+    for i in range(0, 1000):
+        print(a_dice.roll())
