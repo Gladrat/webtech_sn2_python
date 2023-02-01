@@ -37,7 +37,6 @@ class Voiture:
         return self._vitesse_max
 
     def set_vitesse_max(self, vitesse_max):
-        # self._vitesse_max = vitesse_max
         self.bridage(vitesse_max)
 
     def bridage(self, vitesse_bridage):
@@ -71,10 +70,8 @@ class Voiture:
         print("Tut tut")
 
 
-# ta_voiture = Voiture(300, "rouge")
-# ma_voiture = Voiture(225, "vert")
-voiture_prototype = Voiture(225)
-print(voiture_prototype)
+ta_voiture = Voiture(300, "rouge")
+ma_voiture = Voiture(225, "vert")
 
 # print(ta_voiture)
 # print(ma_voiture)
