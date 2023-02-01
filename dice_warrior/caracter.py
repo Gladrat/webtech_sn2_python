@@ -1,6 +1,6 @@
 from __future__ import annotations
 from dice import Dice, RiggedDice
-from rich import print
+from rich import print, console, panel
 
 class Caracter:
     _type = "Caracter"
@@ -12,6 +12,8 @@ class Caracter:
         self._attack = attack
         self._defense = defense
         self._dice: Dice = dice
+        self._console = console.Console()
+        self._panel = panel.Panel("", title=f"[blue]{type(self)._type} {self._name}[/blue]")
 
     def __str__(self):
         return f"I'm a {type(self)._type} named {self._name}"
@@ -30,6 +32,10 @@ class Caracter:
         health_bar = f"{self._name}'s health bar : [{'●' *self._health}{'○'*missing_health}] {self._health}/{self._max_health}hp"
         print(health_bar)
     
+    def show_message(self, message):
+        self._panel.renderable = message
+        self._console.print(self._panel)
+    
     def compute_damages(self, result, target):
         damages = 0
         damages = self._attack + result
@@ -39,7 +45,8 @@ class Caracter:
         if (self.is_alive()):
             result = self._dice.roll()
             damages = self.compute_damages(result, target)
-            print(f"{type(self)._type} [b][red]{self._name}[/red][/b] attack {target.get_name()} with {damages} (attack: {self._attack} + roll: {result})")
+            message = f"⚔️ Attack [red]{target.get_name()}[/red] with {damages} (attack: {self._attack} + roll: {result})"
+            self.show_message(message)
             target.defend(damages, self)
     
     def compute_defense(self, wounds, result, attacker):
@@ -50,7 +57,8 @@ class Caracter:
         damages = wounds
         result = self._dice.roll()
         wounds = self.compute_defense(wounds, result, attacker)
-        print(f"{type(self)._type} [b][blue]{self._name}[/blue][/b] take {wounds} from {attacker.get_name()} (damages: {damages} - defense: {self._defense} - roll: {result})")
+        message = f"🛡️ Defend {wounds} from [red]{attacker.get_name()}[/red] (damages: {damages} - defense: {self._defense} - roll: {result})"
+        self.show_message(message)
         self._health = self._health - wounds
         if (self._health < 0):
             self._health = 0
@@ -86,7 +94,7 @@ if __name__ == "__main__":
     mage = Mage("Helen", 24, 8, 1, Dice(6))
     thief = Thief("Doug", 20, 6, 5, Dice(6))
     farmer = Farmer("Bernardo", 24, 6, 6, Dice(6))    
-    
-    # while (player_1.is_alive() and player_2.is_alive()):
-    #     player_1.attack(player_2)
-    #     player_2.attack(player_1)
+
+    while (warrior.is_alive() and mage.is_alive()):
+        warrior.attack(mage)
+        mage.attack(warrior)
