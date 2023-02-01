@@ -1,7 +1,6 @@
 from __future__ import annotations
 from dice import Dice, RiggedDice
 
-
 class Caracter:
     _type = "Caracter"
 
@@ -19,6 +18,9 @@ class Caracter:
     def get_name(self):
         return self._name
     
+    def get_defense(self):
+        return self._defense
+    
     def is_alive(self):
         return (self._health > 0)
     
@@ -27,23 +29,27 @@ class Caracter:
         health_bar = f"{self._name}'s health bar : [{'●' *self._health}{'○'*missing_health}] {self._health}/{self._max_health}hp"
         print(health_bar)
     
-    def compute_damages(self, result):
+    def compute_damages(self, result, target):
         damages = 0
         damages = self._attack + result
         return damages
     
     def attack(self, target: Caracter):
-        if (self.is_alive()):    
+        if (self.is_alive()):
             result = self._dice.roll()
-            damages = self.compute_damages(result)
+            damages = self.compute_damages(result, target)
             print(f"{type(self)._type} {self._name} attack {target.get_name()} with {damages} (attack: {self._attack} + roll: {result})")
-            target.defend(damages)
+            target.defend(damages, self)
     
-    def defend(self, wounds):
+    def compute_defense(self, wounds, result, attacker):
+        wounds = wounds - self._defense - result
+        return wounds
+    
+    def defend(self, wounds, attacker: Caracter):
         damages = wounds
         result = self._dice.roll()
-        wounds = wounds - self._defense - result
-        print(f"{type(self)._type} {self._name} take {wounds} (damages: {damages} - defense: {self._defense} - roll: {result})")
+        wounds = self.compute_defense(wounds, result, attacker)
+        print(f"{type(self)._type} {self._name} take {wounds} from {attacker.get_name()} (damages: {damages} - defense: {self._defense} - roll: {result})")
         self._health = self._health - wounds
         if (self._health < 0):
             self._health = 0
@@ -52,23 +58,30 @@ class Caracter:
 class Warrior(Caracter):
     _type = "Warrior"
     
-    def compute_damages(self, result):
+    def compute_damages(self, result, target):
         print("Coup de hache ! (+3)")
-        return super().compute_damages(result) + 3
+        return super().compute_damages(result, target) + 3
 
-    
 class Mage(Caracter):
     _type = "Mage"
     
-    # Armure magique absorbe 3 de dégats supplémentaires
-    # + message d'affichage
+    def compute_defense(self, wounds, result, attacker):
+        print("Armure magique ! (-3)")
+        return super().compute_defense(wounds, result, attacker) - 3
+
+class Thief(Caracter):
+    _type = "Thief"
+    
+    def compute_damages(self, result, target: Caracter):
+        print(f"Coup vicieux ! +{target.get_defense()}")
+        return super().compute_damages(result, target) + target.get_defense()
 
 if __name__ == "__main__":
     a_new_dice = Dice()
     print(a_new_dice)
     
     player_1 = Warrior("Tom", 20, 8, 3, a_new_dice)
-    player_2 = Mage("Helen", 20, 8, 3, a_new_dice)
+    player_2 = Thief("Helen", 20, 8, 3, a_new_dice)
     
     while (player_1.is_alive() and player_2.is_alive()):
         player_1.attack(player_2)
