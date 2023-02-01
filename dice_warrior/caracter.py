@@ -1,5 +1,6 @@
 from __future__ import annotations
 from dice import Dice, RiggedDice
+from rich import print
 
 class Caracter:
     _type = "Caracter"
@@ -38,7 +39,7 @@ class Caracter:
         if (self.is_alive()):
             result = self._dice.roll()
             damages = self.compute_damages(result, target)
-            print(f"{type(self)._type} {self._name} attack {target.get_name()} with {damages} (attack: {self._attack} + roll: {result})")
+            print(f"{type(self)._type} [b][red]{self._name}[/red][/b] attack {target.get_name()} with {damages} (attack: {self._attack} + roll: {result})")
             target.defend(damages, self)
     
     def compute_defense(self, wounds, result, attacker):
@@ -49,7 +50,7 @@ class Caracter:
         damages = wounds
         result = self._dice.roll()
         wounds = self.compute_defense(wounds, result, attacker)
-        print(f"{type(self)._type} {self._name} take {wounds} from {attacker.get_name()} (damages: {damages} - defense: {self._defense} - roll: {result})")
+        print(f"{type(self)._type} [b][blue]{self._name}[/blue][/b] take {wounds} from {attacker.get_name()} (damages: {damages} - defense: {self._defense} - roll: {result})")
         self._health = self._health - wounds
         if (self._health < 0):
             self._health = 0
@@ -76,13 +77,16 @@ class Thief(Caracter):
         print(f"Coup vicieux ! +{target.get_defense()}")
         return super().compute_damages(result, target) + target.get_defense()
 
+class Farmer(Caracter):
+    _type = "Farmer"
+
 if __name__ == "__main__":
-    a_new_dice = Dice()
-    print(a_new_dice)
     
-    player_1 = Warrior("Tom", 20, 8, 3, a_new_dice)
-    player_2 = Thief("Helen", 20, 8, 3, a_new_dice)
+    warrior = Warrior("Tom", 24, 1, 8, Dice(6))
+    mage = Mage("Helen", 24, 8, 1, Dice(6))
+    thief = Thief("Doug", 20, 6, 5, Dice(6))
+    farmer = Farmer("Bernardo", 24, 6, 6, Dice(6))    
     
-    while (player_1.is_alive() and player_2.is_alive()):
-        player_1.attack(player_2)
-        player_2.attack(player_1)
+    # while (player_1.is_alive() and player_2.is_alive()):
+    #     player_1.attack(player_2)
+    #     player_2.attack(player_1)
