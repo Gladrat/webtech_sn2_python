@@ -8,7 +8,7 @@ import random
 class Dice:
     _type = "normal dice"
     
-    def __init__(self, faces):
+    def __init__(self, faces = 6):
         self._faces = faces
     
     def __str__(self):
@@ -21,14 +21,16 @@ class RiggedDice(Dice):
     _type = "rigged dice"
     
     def roll(self, rigged = False):
-        # argument un booléen "rigged" / par défaut False
-            # True : jet de dès truqué
-            # False : jet de dès normal
-        return self._faces
+        if rigged:
+            return self._faces
+        else:
+            return super().roll()
 
-a_dice = Dice(6)
-print(a_dice)
 
-a_rigged_dice = RiggedDice(20)
-print(a_rigged_dice)
-print(a_rigged_dice.roll())
+if __name__ == "__main__":
+    a_dice = Dice()
+    print(a_dice)
+
+    a_rigged_dice = RiggedDice(20)
+    print(a_rigged_dice)
+    print(a_rigged_dice.roll(True))
