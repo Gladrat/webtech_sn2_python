@@ -27,11 +27,17 @@ class Caracter:
         health_bar = f"{self._name}'s health bar : [{'●' *self._health}{'○'*missing_health}] {self._health}/{self._max_health}hp"
         print(health_bar)
     
-    def attack(self, target: Caracter):
-        result = self._dice.roll()
+    def compute_damages(self, result):
+        damages = 0
         damages = self._attack + result
-        print(f"{type(self)._type} {self._name} attack {target.get_name()} with {damages} (attack: {self._attack} + roll: {result})")
-        target.defend(damages)
+        return damages
+    
+    def attack(self, target: Caracter):
+        if (self.is_alive()):    
+            result = self._dice.roll()
+            damages = self.compute_damages(result)
+            print(f"{type(self)._type} {self._name} attack {target.get_name()} with {damages} (attack: {self._attack} + roll: {result})")
+            target.defend(damages)
     
     def defend(self, wounds):
         damages = wounds
@@ -39,15 +45,31 @@ class Caracter:
         wounds = wounds - self._defense - result
         print(f"{type(self)._type} {self._name} take {wounds} (damages: {damages} - defense: {self._defense} - roll: {result})")
         self._health = self._health - wounds
+        if (self._health < 0):
+            self._health = 0
         self.show_health()
+
+class Warrior(Caracter):
+    _type = "Warrior"
+    
+    def compute_damages(self, result):
+        print("Coup de hache ! (+3)")
+        return super().compute_damages(result) + 3
+
+    
+class Mage(Caracter):
+    _type = "Mage"
+    
+    # Armure magique absorbe 3 de dégats supplémentaires
+    # + message d'affichage
 
 if __name__ == "__main__":
     a_new_dice = Dice()
     print(a_new_dice)
     
-    caracter_1 = Caracter("Tom", 20, 8, 3, a_new_dice)
-    caracter_2 = Caracter("Helen", 20, 8, 3, a_new_dice)
+    player_1 = Warrior("Tom", 20, 8, 3, a_new_dice)
+    player_2 = Mage("Helen", 20, 8, 3, a_new_dice)
     
-    caracter_1.attack(caracter_2)
-    # Moteur du jeu
-        # Il se tape sur la tronche jusqu'à ce qu'il y en ai un de mort
+    while (player_1.is_alive() and player_2.is_alive()):
+        player_1.attack(player_2)
+        player_2.attack(player_1)
