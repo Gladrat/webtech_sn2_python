@@ -1,0 +1,1 @@
+from dice_warrior.caracter import Warrior

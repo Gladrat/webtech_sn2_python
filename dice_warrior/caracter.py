@@ -14,12 +14,13 @@ class Caracter:
         self._dice: Dice = dice
         self._console = console.Console()
         self._panel = panel.Panel("", title=f"[blue]{type(self)._type} {self._name}[/blue]")
+        self._messages = False
 
     def __str__(self):
         return f"I'm a {type(self)._type} named {self._name}"
     
     def get_name(self):
-        return self._name
+        return f"{self._name} ({self._type})"
     
     def get_defense(self):
         return self._defense
@@ -27,14 +28,17 @@ class Caracter:
     def is_alive(self):
         return (self._health > 0)
     
+    def regenerate(self):
+        self._health = self._max_health
+    
     def show_health(self):
         missing_health = self._max_health - self._health
         health_bar = f"{self._name}'s health bar : [{'●' *self._health}{'○'*missing_health}] {self._health}/{self._max_health}hp"
-        print(health_bar)
+        print(health_bar) if self._messages else False
     
     def show_message(self, message):
         self._panel.renderable = message
-        self._console.print(self._panel)
+        self._console.print(self._panel) if self._messages else False
     
     def compute_damages(self, result, target):
         damages = 0
@@ -51,7 +55,7 @@ class Caracter:
     
     def compute_defense(self, wounds, result, attacker):
         wounds = wounds - self._defense - result
-        return wounds
+        return wounds if wounds > 0 else 0
     
     def defend(self, wounds, attacker: Caracter):
         damages = wounds
@@ -68,33 +72,23 @@ class Warrior(Caracter):
     _type = "Warrior"
     
     def compute_damages(self, result, target):
-        print("Coup de hache ! (+3)")
+        print("Coup de hache ! (+3)")  if self._messages else False
         return super().compute_damages(result, target) + 3
 
 class Mage(Caracter):
     _type = "Mage"
     
     def compute_defense(self, wounds, result, attacker):
-        print("Armure magique ! (-3)")
-        return super().compute_defense(wounds, result, attacker) - 3
+        print("Armure magique ! (-3)")  if self._messages else False
+        wounds = super().compute_defense(wounds, result, attacker) - 3
+        return wounds if wounds > 0 else 0
 
 class Thief(Caracter):
     _type = "Thief"
     
     def compute_damages(self, result, target: Caracter):
-        print(f"Coup vicieux ! +{target.get_defense()}")
+        print(f"Coup vicieux ! +{target.get_defense()}")  if self._messages else False
         return super().compute_damages(result, target) + target.get_defense()
 
 class Farmer(Caracter):
     _type = "Farmer"
-
-if __name__ == "__main__":
-    
-    warrior = Warrior("Tom", 24, 1, 8, Dice(6))
-    mage = Mage("Helen", 24, 8, 1, Dice(6))
-    thief = Thief("Doug", 20, 6, 5, Dice(6))
-    farmer = Farmer("Bernardo", 24, 6, 6, Dice(6))    
-
-    while (warrior.is_alive() and mage.is_alive()):
-        warrior.attack(mage)
-        mage.attack(warrior)
