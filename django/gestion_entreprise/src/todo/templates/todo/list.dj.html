@@ -1,3 +1,38 @@
-hello world of tasks list !
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    Whe are the {% now "Y-m-d H:i" %}
 
-Hello 2 !
+    {% comment %} {% lorem 3 p random %} {% endcomment %}
+
+    <ul>
+        {% for t in task_list %}
+
+            {% if t.name|length >= 7 %}
+
+            {% comment %} | truncatechars:20 {% endcomment %}
+
+            <li>({{ t.id }}) {{ t.name }} - 
+                    {{ t.description|truncatechars:20 }} 
+                    {% comment %} {% if t.description|length >= 20 %}
+                        {{ t.description|truncatechars:20 }} 
+                    {% else %}
+                        {{ t.description }} 
+                    {% endif %} {% endcomment %}
+                    
+                    - {{ t.due_date|date:'d/m/Y' }}</li>
+
+            {% endif %}
+
+        {% endfor %}
+    </ul>
+</body>
+</html>
+
+

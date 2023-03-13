@@ -7,6 +7,13 @@
     <title>Details</title>
 </head>
 <body>
-    <h1>Task details ({{ task.id }}): {{ task.name }}</h1>
+    <h1>({{ task.id }}): {{ task.name }}</h1>
+
+    <ul>
+        <li>{{ task.description }}</li>
+        <li>Created: {{ task.created_date }}</li>
+        <li>Due date: {{ task.due_date }}</li>
+        <li>Closed: {{ task.closed }}</li>
+    </ul>
 </body>
 </html>

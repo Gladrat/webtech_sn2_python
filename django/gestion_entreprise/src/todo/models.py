@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from django.utils.text import slugify
 from django.utils.html import format_html
 from django.contrib import admin
@@ -43,6 +44,9 @@ class Task(models.Model):
     def shortened_description(self):
         return f"{self.description[:20]}..." if len(self.description) > 20 else self.description
 
+    def get_absolute_url(self):
+        return reverse("task-slug", kwargs={"slug": self.slug})
+    
     class Meta:
         ordering = ['slug']
         verbose_name = "Tâche"
