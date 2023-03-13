@@ -1,14 +1,17 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 
+from .models import Task
+
 def tasks_list(request):
-    return render(request=request, template_name="todo/list.dj.html", context = {})
+    tasks = Task.objects.all()
+    # print(tasks[0])
+    return render(request=request, template_name="todo/list.dj.html", context = {'tasks':tasks})
 
 def task_details(request, id):
-    context = {
-        "title": "Task details",
-        "id": id
-    }
+    task = Task.objects.get(id=id)
+    context = {"task":task}
+    # print(task)
     return render(request=request, template_name="todo/details.dj.html", context=context)
 
 def task_create(request):
