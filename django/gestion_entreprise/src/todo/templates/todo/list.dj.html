@@ -1,14 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    Whe are the {% now "Y-m-d H:i" %}
+{% extends 'base.dj.html' %}
+{% load static %}
 
+{% block title %}Todo App{% endblock title %}
+
+{% block app-ressources %}
+    <link rel="stylesheet" href="{% static 'todo/css/todo_style.css' %}">
+{% endblock app-ressources %}
+
+{% block content %}
+
+    <p><a href="{% url 'index' %}">< Back to Index</a></p>
+
+    <h1>Task list</h1>
+    
+    <p>Today is the {% now "Y-m-d H:i" %} - <a href="{% url 'task-create' %}">Create a new task</a></p>
+    
     {% comment %} {% lorem 3 p random %} {% endcomment %}
 
     <ul>
@@ -16,23 +22,11 @@
 
             {% if t.name|length >= 7 %}
 
-            {% comment %} | truncatechars:20 {% endcomment %}
-
-            <li>({{ t.id }}) {{ t.name }} - 
-                    {{ t.description|truncatechars:20 }} 
-                    {% comment %} {% if t.description|length >= 20 %}
-                        {{ t.description|truncatechars:20 }} 
-                    {% else %}
-                        {{ t.description }} 
-                    {% endif %} {% endcomment %}
-                    
-                    - {{ t.due_date|date:'d/m/Y' }}</li>
-
+            <li><a href="{% url 'task-slug' t.slug %}">({{ t.id }}) {{ t.name }}</a> - 
+                    {{ t.description|truncatechars:20 }} - {{ t.due_date|date:'d/m/Y' }}</li>
             {% endif %}
 
         {% endfor %}
     </ul>
-</body>
-</html>
 
-
+{% endblock content %}

@@ -1,16 +1,14 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 
-from .models import Task
+from .models import Task, Tag
 
 def tasks_list(request):
     task_list = Task.objects.all()
+    tag_list = Tag.objects.all()
     context = {
         "task_list":task_list,
-        "name": "Geoffroy",
-        "age": 38,
-        "var": False,
-        "hobbies": ["coder", "gamer", "elever un enfant"]
+        "tag_list":tag_list
     }
     return render(request=request, template_name="todo/list.dj.html", context=context)
 
@@ -34,4 +32,6 @@ def task_update(request, id):
     return render(request=request, template_name="todo/update.dj.html")
 
 def task_delete(request, id):
+    t = Task.objects.get(id=id)
+    t.delete()
     return render(request=request, template_name="todo/delete.dj.html")

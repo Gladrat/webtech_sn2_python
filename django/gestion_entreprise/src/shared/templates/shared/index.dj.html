@@ -1,12 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index</title>
-</head>
-<body>
-    <h1>Hello World of Django !</h1>
-</body>
-</html>
+{% extends 'base.dj.html' %}
+
+{% block title %}Gestion Entreprise - Index{% endblock title %}
+
+{% block content %}
+    <h1>Index of Gestion Entreprise</h1>
+
+    <ul>
+        <li><a href="{% url 'task-list' %}">Todo App</a></li>
+        <li>Calendar App</li>
+        <li>Customer App</li>
+    </ul>
+{% endblock content %}

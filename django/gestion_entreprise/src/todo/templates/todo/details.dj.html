@@ -1,19 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Details</title>
-</head>
-<body>
-    <h1>({{ task.id }}): {{ task.name }}</h1>
+{% extends 'base.dj.html' %} {% block title %}Task details - ({{ task.id }}) {{
+task.name }}{% endblock title %} {% block content %}
+<p><a href="{% url 'task-list' %}">< Back to task list</a></p>
 
-    <ul>
-        <li>{{ task.description }}</li>
-        <li>Created: {{ task.created_date }}</li>
-        <li>Due date: {{ task.due_date }}</li>
-        <li>Closed: {{ task.closed }}</li>
-    </ul>
-</body>
-</html>
+<h1>({{ task.id }}): {{ task.name }}</h1>
+
+<ul>
+    <li>{{ task.description }}</li>
+    <li>Created: {{ task.created_date }}</li>
+    <li>Due date: {{ task.colored_due_date }}</li>
+    <li>Closed: {{ task.closed }}</li>
+</ul>
+
+<p>
+    <a href="{% url 'task-update' task.id %}">Update</a> -
+    <a href="{% url 'task-delete' task.id %}">Delete</a>
+</p>
+{% endblock content %}

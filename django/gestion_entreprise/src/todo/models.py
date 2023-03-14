@@ -6,8 +6,38 @@ from django.contrib import admin
 
 from datetime import date
 
+# Category
+    # name
+    # slug
+class Category(models.Model):
+    name = models.CharField(max_length=50, blank=False)
+    slug = models.SlugField(null=True)
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"({self.id}) {self.name}"
+
+
+class Tag(models.Model):
+    name = models.CharField(max_length=50, blank=False)
+    slug = models.SlugField(null=True)
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"({self.id}) {self.name}"
+
 
 class Task(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
+    tag = models.ManyToManyField(Tag)
     name = models.CharField(max_length=50, blank=False)
     description = models.TextField()
     created_date = models.DateField(auto_now=True)
@@ -18,6 +48,8 @@ class Task(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
+        if not self.category:
+            self.category = Category.objects.order_by('id').first()
         super().save(*args, **kwargs)
     
     def __str__(self):
@@ -50,3 +82,16 @@ class Task(models.Model):
     class Meta:
         ordering = ['slug']
         verbose_name = "Tâche"
+        
+        
+# Renommer la première catégorie : Default
+# Recréer la catégorie dev
+# save() task -> assigner la catégorie "Default" si la tâche ne possède pas de catégorie
+
+class Dice:
+    
+    def __init__(self, faces):
+        self.faces = faces
+        
+    def roll(self):
+        return self.faces
