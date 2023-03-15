@@ -26,6 +26,7 @@ def task_details(request, id):
     return render(request=request, template_name="todo/details.dj.html", context=context)
 
 def task_create(request):
+    
     return render(request=request, template_name="todo/create.dj.html")
 
 def task_update(request, id):

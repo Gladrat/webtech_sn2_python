@@ -2,4 +2,13 @@
 
 {% block title %}Create task{% endblock title %}
 
-{% block content %}Create task{% endblock content %}
+{% block content %}
+    <h1>Create a new task</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+        <button type="submit">Create task</button>
+    </form>
+{% endblock content %}
