@@ -82,11 +82,7 @@ class Task(models.Model):
     class Meta:
         ordering = ['slug']
         verbose_name = "Tâche"
-        
-        
-# Renommer la première catégorie : Default
-# Recréer la catégorie dev
-# save() task -> assigner la catégorie "Default" si la tâche ne possède pas de catégorie
+
 
 class Dice:
     

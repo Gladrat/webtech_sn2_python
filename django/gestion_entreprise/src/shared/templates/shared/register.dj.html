@@ -1,0 +1,21 @@
+{% block title %}Register a new user{% endblock title %}
+
+{% block content %}
+
+    {% if form.is_valid %}
+    
+        <h1>Bienvenue !</h1>
+
+    {% else %}
+
+        <h1>Register</h1>
+
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Register</button>
+        </form>
+
+    {% endif %}
+
+{% endblock content %}
