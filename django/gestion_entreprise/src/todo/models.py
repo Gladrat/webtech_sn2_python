@@ -39,7 +39,7 @@ class Task(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     tag = models.ManyToManyField(Tag)
     name = models.CharField(max_length=50, blank=False)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     created_date = models.DateField(auto_now=True)
     due_date = models.DateField(default=date.today)
     closed = models.BooleanField(default=False)

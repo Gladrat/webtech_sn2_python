@@ -5,6 +5,10 @@
 {% block content %}
     <h1>Create a new task</h1>
 
+    {% if saved %}
+        {{ saved }}
+    {% endif %}
+
     <form method="POST">
         {% csrf_token %}
 

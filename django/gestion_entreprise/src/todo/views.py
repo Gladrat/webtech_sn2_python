@@ -1,7 +1,8 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 
 from .models import Task, Tag
+from .forms import TaskForm
 
 def tasks_list(request):
     task_list = Task.objects.all()
@@ -26,8 +27,19 @@ def task_details(request, id):
     return render(request=request, template_name="todo/details.dj.html", context=context)
 
 def task_create(request):
-    
-    return render(request=request, template_name="todo/create.dj.html")
+    saved = False
+    if (request.method == "POST"):
+        form = TaskForm(request.POST)
+        if form.is_valid:
+            task = form.save(commit=False)
+            # manipulation des données du formulaire
+            # ...
+            task.save()
+            saved = f"The task {form.cleaned_data.get('name')} was created"
+            return HttpResponseRedirect(request.path)
+    else:
+        form = TaskForm()
+    return render(request=request, template_name="todo/create.dj.html", context={"form":form, "saved":saved})
 
 def task_update(request, id):
     return render(request=request, template_name="todo/update.dj.html")
